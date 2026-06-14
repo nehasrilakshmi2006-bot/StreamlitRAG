@@ -170,10 +170,9 @@ def build_pipeline():
     )
 
     # Groq LLM — fast inference
-    groq_key = (
-        os.environ.get("GROQ_API_KEY")
-        or st.secrets.get("GROQ_API_KEY", "")
-    )
+    # Set env var directly so Groq client picks it up automatically
+    os.environ["GROQ_API_KEY"] = st.secrets["GROQ_API_KEY"]
+
     llm = ChatGroq(
         api_key=groq_key,
         model="llama-3.1-8b-instant",
