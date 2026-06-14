@@ -174,7 +174,6 @@ def build_pipeline():
     os.environ["GROQ_API_KEY"] = st.secrets["GROQ_API_KEY"]
 
     llm = ChatGroq(
-        api_key=groq_key,
         model="llama-3.1-8b-instant",
         temperature=0.1,
         max_tokens=512
