@@ -136,9 +136,26 @@ def build_pipeline():
     """Load PDFs, chunk, embed, and build FAISS + retriever + LLM."""
 
     # Corpus path: env var → Streamlit secrets → default local path
-    corpus_path = (
-        os.environ.get("CORPUS_PATH")
-        or st.secrets.get("CORPUS_PATH", "./data")
+    # Load PDFs
+corpus_path = (
+    os.environ.get("CORPUS_PATH")
+    or st.secrets.get("CORPUS_PATH", "./data")
+    )
+
+   if not os.path.exists(corpus_path):
+      st.error(f"❌ PDF folder not found: {corpus_path}")
+      st.stop()
+
+  pdf_files = [f for f in os.listdir(corpus_path) if f.endswith(".pdf")]
+
+  if not pdf_files:
+       st.error(f"❌ No PDF files found in: {corpus_path}. Please upload the 11 HR policy PDFs.")
+       st.stop()
+
+  st.info(f"📄 Found {len(pdf_files)} PDF files. Loading...")
+
+  loader = PyPDFDirectoryLoader(corpus_path)
+  docs = loader.load()
     )
 
     # Load all PDF documents
